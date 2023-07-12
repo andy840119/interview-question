@@ -1,0 +1,33 @@
+<ng-select
+    [items]="search$ | async"
+    [ngModel]="model"
+    (ngModelChange)="onModelChange($event)"
+    #ngSelect
+    (open)="onOpen()"
+    [searchable]="false"
+    [clearOnBackspace]="false"
+    (close)="onClose()"
+    (clear)="onClear()"
+>
+    <!-- search area -->
+    <ng-template ng-header-tmp let-o="item">
+        <div class="search-container select2-search">
+            <input
+                [value]="model ? getInputText(model) : null"
+                type="text"
+                (input)="ngSelect.filter($event.target.value)"
+                #searchInput
+                (keydown)="onSearchInputKeydown($event)"
+            />
+        </div>
+    </ng-template>
+    <!-- dropdown item (customized style)-->
+    <ng-template ng-label-tmp let-o="item">
+      <div *ngIf="o.location_type == 'WAREHOUSE'">{{ getDisplayText(o) }}</div>
+      <div *ngIf="o.location_type == 'FACTOR'">
+          <span class="bold">{{ o.location }}</span>&nbsp;
+          <span class="text-default">{{ getDisplayAddress(o) }}</span>
+          <span>{{ getDisplayText(o) }}</span>
+      </div>
+    </ng-template>
+</ng-select>
